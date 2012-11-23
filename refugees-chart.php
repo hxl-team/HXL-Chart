@@ -10,7 +10,7 @@ if(!isset($_GET['emergency'])){
 
 }
 
-function queryRefugeesLowestLevel(){
+function queryRefugeesLowestLevel($show){
   $query = "
 prefix ogc: <http://www.opengis.net/ont/geosparql#> 
 prefix hxl: <http://hxl.humanitarianresponse.info/ns/#>
@@ -40,7 +40,7 @@ WHERE {
 } 
 
 GROUP BY ?unit ?unitName ?valid ?wkt ?level 
-ORDER BY ?unit ?valid
+ORDER BY ?unitName ?unit ?valid
 ";
 
     $queryResult = getQueryResults($query);
@@ -65,7 +65,14 @@ ORDER BY ?unit ?valid
             }
 
             $return .= "{
-                name: '".$row["unitName"]."',
+                name: '".$row["unitName"]."',";
+
+            if(!in_array($row["unit"], $show)){
+              $return .= "
+                visible: false,";
+            }
+
+            $return .= "    
                 data: [";
 
             $lastUnit = $row["unit"];
@@ -139,7 +146,7 @@ $(function () {
                 }
             },
             
-            series: [<?php queryRefugeesLowestLevel(); ?>]
+            series: [<?php queryRefugeesLowestLevel(explode(",", $_GET["show"])); ?>]
         });
     });
     
