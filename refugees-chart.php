@@ -118,10 +118,7 @@ $(function () {
                 type: 'spline'
             },
             title: {
-                text: 'Mali crisis: Refugees per Location'
-            },
-            subtitle: {
-                text: 'Data source: HXL triple store test data'
+                text: ''
             },
             xAxis: {
                 type: 'datetime',
